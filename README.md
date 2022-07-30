@@ -2,7 +2,7 @@
 
 ## team nodeinfra
 
-## run provider node
+### run provider node
 
 ~~~ bash
 
@@ -73,7 +73,7 @@ interchain-security-pd tx gov vote 1 yes --from provider-keyname   --keyring-bac
 interchain-security-pd q gov proposal 1 --home prov-node-dir
 ~~~
 
-## run Consumer node
+### run consumer node
 ~~~ bash
 
 interchain-security-cd init consumer-node-moniker --chain-id consumer --home cons-node-dir
@@ -117,7 +117,7 @@ interchain-security-cd start --home cons-node-dir \
 ~~~
 
 
-## run hermes
+### run hermes
 ~~~ bash
 mkdir ~/.hermes
 
