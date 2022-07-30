@@ -1,6 +1,10 @@
 # HackAtom 
 
-## team nodeinfra
+## Team Nodeinfra
+
+## See the code we wrote
+
+https://github.com/johnyangk/nodeinfra-22hackatomseoul/compare/957e6148fbf21a977337788db6d2a8433d0ebf05...main
 
 ## 실행 1
 
