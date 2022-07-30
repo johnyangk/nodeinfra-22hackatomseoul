@@ -2,7 +2,7 @@
 
 ## team nodeinfra
 
-## 실행 1
+## run provider node
 
 ~~~ bash
 
@@ -40,11 +40,7 @@ interchain-security-pd start
     --address tcp://localhost:26655 \
     --p2p.laddr tcp://localhost:26656 \
     --grpc-web.enable=false
-        
-~~~
-
-## 실행 2
-~~~ bash      
+              
 interchain-security-pd q staking validators --home prov-node-dir
      
 tee consumer-proposal.json<<EOF
@@ -77,7 +73,7 @@ interchain-security-pd tx gov vote 1 yes --from provider-keyname   --keyring-bac
 interchain-security-pd q gov proposal 1 --home prov-node-dir
 ~~~
 
-## 실행3 Consumer node 실행
+## run Consumer node
 ~~~ bash
 
 interchain-security-cd init consumer-node-moniker --chain-id consumer --home cons-node-dir
@@ -117,6 +113,12 @@ interchain-security-cd start --home cons-node-dir \
         --p2p.laddr tcp://localhost:26646 \
         --grpc-web.enable=false
 
+
+~~~
+
+
+## run hermes
+~~~ bash
 mkdir ~/.hermes
 
 tee ~/.hermes/config.toml<<EOF
