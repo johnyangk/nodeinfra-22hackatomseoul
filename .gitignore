@@ -6,3 +6,12 @@ docs/tla/states/
 *.out
 vendor/
 .vscode
+
+
+.idea
+
+provider-node-dir
+consumer-node-dir
+prov-node-dir
+cons-node-dir
+provider-keyname_keypair.json

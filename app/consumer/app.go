@@ -1,5 +1,7 @@
 package app
 
+// hooks = gov hooks
+
 import (
 	"fmt"
 	"io"
@@ -370,6 +372,8 @@ func New(
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, ibcmodule)
 	ibcRouter.AddRoute(ibcconsumertypes.ModuleName, consumerModule)
 	app.IBCKeeper.SetRouter(ibcRouter)
+
+	// Router
 
 	// create evidence keeper with router
 	evidenceKeeper := evidencekeeper.NewKeeper(

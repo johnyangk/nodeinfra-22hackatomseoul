@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -115,6 +116,55 @@ func (k Keeper) OnTimeoutPacket(ctx sdk.Context, packet channeltypes.Packet) err
 	// stop consumer chain and uses the LockUnbondingOnTimeout flag
 	// to decide whether the unbonding operations should be released
 	return k.StopConsumerChain(ctx, chainID, k.GetLockUnbondingOnTimeout(ctx, chainID), false)
+}
+
+type PcVote struct {
+	ProposalID uint64
+	VoteAddr   sdk.AccAddress
+}
+
+func (k Keeper) SendPCVote(ctx sdk.Context, proposalID uint64, voterAddr sdk.AccAddress) {
+	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ SENDPCVOTE 0: ", proposalID)
+
+	pcVoteStruct := PcVote{ProposalID: proposalID, VoteAddr: voterAddr}
+	packetData, err := json.Marshal(pcVoteStruct)
+
+	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ SENDPCVOTE 1: ", pcVoteStruct, packetData, err)
+
+	k.IterateConsumerChains(ctx, func(ctx sdk.Context, chainID string) (stop bool) {
+		// check whether there is an established CCV channel to this consumer chain
+		//if channelID, found := k.GetChainToChannel(ctx, chainID); found {
+		//	// Send pending VSC packets to consumer chain
+		//	k.SendPendingVSCPackets(ctx, chainID, channelID)
+		//}
+
+		fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ SENDPCVOTE 2: ", chainID)
+
+		// check whether there is an established CCV channel to this consumer chain
+		if channelID, found := k.GetChainToChannel(ctx, chainID); found {
+
+			fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ SENDPCVOTE 3: ", channelID)
+
+			// send this validator set change packet data to the consumer chain
+			err := utils.SendIBCPacket(
+				ctx,
+				k.scopedKeeper,
+				k.channelKeeper,
+				channelID,    // source channel id
+				types.PortID, // source port id
+				packetData,
+			)
+			if err != nil {
+				panic(fmt.Errorf("packet could not be sent over IBC: %w", err))
+			}
+		} else {
+			// TODO
+			// store the packet data to be sent once the CCV channel is established
+			// k.AppendPendingVSC(ctx, chainID, packetData)
+		}
+
+		return false // do not stop the iteration
+	})
 }
 
 // SendValidatorUpdates sends latest validator updates to every registered consumer chain

@@ -456,6 +456,8 @@ func New(
 		govRouter,
 	)
 
+	app.GovKeeper = *app.GovKeeper.SetHooks(app.ProviderKeeper.GetGovHooks())
+
 	app.TransferKeeper = ibctransferkeeper.NewKeeper(
 		appCodec,
 		keys[ibctransfertypes.StoreKey],

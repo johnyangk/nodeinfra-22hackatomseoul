@@ -395,6 +395,11 @@ func (am AppModule) OnChanCloseConfirm(
 	return nil
 }
 
+type PcVote struct {
+	ProposalID uint64
+	VoteAddr   sdk.AccAddress
+}
+
 // OnRecvPacket implements the IBCModule interface. A successful acknowledgement
 // is returned if the packet data is successfully decoded and the receive application
 // logic returns without error.
@@ -407,11 +412,26 @@ func (am AppModule) OnRecvPacket(
 		ack  ibcexported.Acknowledgement
 		data ccv.ValidatorSetChangePacketData
 	)
-	if err := ccv.ModuleCdc.UnmarshalJSON(packet.GetData(), &data); err != nil {
-		errAck := channeltypes.NewErrorAcknowledgement(fmt.Sprintf("cannot unmarshal CCV packet data: %s", err.Error()))
-		ack = &errAck
+
+	fmt.Println("###################################### RECV 0: ")
+
+	var pcvote PcVote
+	err := json.Unmarshal(packet.GetData(), &pcvote)
+	fmt.Println("###################################### RECV xx: ", packet.GetData())
+	fmt.Println("###################################### RECV xx: ", pcvote)
+
+	if err != nil {
+		fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ RECV pcvote: ", pcvote)
+
+		am.keeper.OnRecvVSCPacket()
+
 	} else {
-		ack = am.keeper.OnRecvVSCPacket(ctx, packet, data)
+		if err := ccv.ModuleCdc.UnmarshalJSON(packet.GetData(), &data); err != nil {
+			errAck := channeltypes.NewErrorAcknowledgement(fmt.Sprintf("cannot unmarshal CCV packet data: %s", err.Error()))
+			ack = &errAck
+		} else {
+			ack = am.keeper.OnRecvVSCPacket(ctx, packet, data)
+		}
 	}
 
 	ctx.EventManager().EmitEvent(

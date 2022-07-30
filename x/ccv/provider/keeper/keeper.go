@@ -5,7 +5,6 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -506,6 +505,52 @@ func (k Keeper) GetValidatorSetUpdateId(ctx sdk.Context) (validatorSetUpdateId u
 	}
 
 	return validatorSetUpdateId
+}
+
+type GovHooks struct {
+	k *Keeper
+}
+
+// Return the wrapper struct
+func (k *Keeper) GetGovHooks() GovHooks {
+	return GovHooks{k}
+}
+
+func (h GovHooks) AfterProposalDeposit(ctx sdk.Context, proposalID uint64, depositorAddr sdk.AccAddress) {
+
+}
+
+func (h GovHooks) AfterProposalFailedMinDeposit(ctx sdk.Context, proposalID uint64) {
+
+}
+
+func (h GovHooks) AfterProposalVotingPeriodEnded(ctx sdk.Context, proposalID uint64) {
+
+}
+
+func (h GovHooks) AfterProposalSubmission(ctx sdk.Context, proposalID uint64) {
+	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Submitted proposal: ", proposalID)
+	fmt.Println("2$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Submitted proposal: ", proposalID)
+
+	add, err := sdk.AccAddressFromHex("11")
+
+	if err != nil {
+		fmt.Println("X", err)
+	}
+
+	fmt.Println("X2", add)
+	h.k.SendPCVote(ctx, proposalID, add)
+	fmt.Println("X3", add)
+
+	// panic("BAD")
+}
+
+func (h GovHooks) AfterProposalVote(ctx sdk.Context, proposalID uint64, voterAddr sdk.AccAddress) {
+	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Submitted vote: ", proposalID)
+
+	h.k.SendPCVote(ctx, proposalID, voterAddr)
+
+	// panic("BAD")
 }
 
 type StakingHooks struct {

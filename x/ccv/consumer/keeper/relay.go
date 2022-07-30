@@ -15,6 +15,10 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
+func (k Keeper) OnRecvVotePacket(ctx sdk.Context, packet channeltypes.Packet, newChanges ccv.ValidatorSetChangePacketData) exported.Acknowledgement {
+	k.govKeeper
+}
+
 // OnRecvVSCPacket sets the pending validator set changes that will be flushed to ABCI on Endblock
 // and set the maturity time for the packet. Once the maturity time elapses, a VSCMatured packet is
 // sent back to the provider chain.
