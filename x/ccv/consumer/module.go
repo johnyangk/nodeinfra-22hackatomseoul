@@ -413,12 +413,21 @@ func (am AppModule) OnRecvPacket(
 		data ccv.ValidatorSetChangePacketData
 	)
 
-	fmt.Println("###################################### RECV 0: ")
+	//fmt.Println("###################################### RECV 0: ")
 
 	var pcvote PcVote
 	err := json.Unmarshal(packet.GetData(), &pcvote)
-	fmt.Println("###################################### RECV xx: ", packet.GetData())
-	fmt.Println("###################################### RECV xx: ", pcvote)
+	//fmt.Println("###################################### RECV 1: ", pcvote)
+
+	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+	fmt.Println("RECEIVED FROM PROVIDER NODE")
+	fmt.Println("PROPOSAL ID: ", pcvote.ProposalID)
+	fmt.Println("VOTER ADDRESS(0 if proposal submission): ", pcvote.VoteAddr)
+	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
 	if err != nil {
 		fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ RECV pcvote: ", pcvote)

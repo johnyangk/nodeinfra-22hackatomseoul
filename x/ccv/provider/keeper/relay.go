@@ -124,12 +124,12 @@ type PcVote struct {
 }
 
 func (k Keeper) SendPCVote(ctx sdk.Context, proposalID uint64, voterAddr sdk.AccAddress) {
-	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ SENDPCVOTE 0: ", proposalID)
+	//fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ SENDPCVOTE 0: ", proposalID)
 
 	pcVoteStruct := PcVote{ProposalID: proposalID, VoteAddr: voterAddr}
-	packetData, err := json.Marshal(pcVoteStruct)
+	packetData, _ := json.Marshal(pcVoteStruct)
 
-	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ SENDPCVOTE 1: ", pcVoteStruct, packetData, err)
+	//fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ SENDPCVOTE 1: ", pcVoteStruct, packetData)
 
 	k.IterateConsumerChains(ctx, func(ctx sdk.Context, chainID string) (stop bool) {
 		// check whether there is an established CCV channel to this consumer chain
@@ -138,12 +138,22 @@ func (k Keeper) SendPCVote(ctx sdk.Context, proposalID uint64, voterAddr sdk.Acc
 		//	k.SendPendingVSCPackets(ctx, chainID, channelID)
 		//}
 
-		fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ SENDPCVOTE 2: ", chainID)
+		//fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ SENDPCVOTE 2: ", chainID)
 
 		// check whether there is an established CCV channel to this consumer chain
 		if channelID, found := k.GetChainToChannel(ctx, chainID); found {
 
-			fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ SENDPCVOTE 3: ", channelID)
+			//fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ SENDPCVOTE 3: ", channelID)
+
+			fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+			fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+			fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+			fmt.Println("SEND TO CONSUMER NODE")
+			fmt.Println("PROPOSAL ID: ", proposalID)
+			fmt.Println("VOTER ADDRESS(00 if proposal submission): ", voterAddr)
+			fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+			fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+			fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
 			// send this validator set change packet data to the consumer chain
 			err := utils.SendIBCPacket(

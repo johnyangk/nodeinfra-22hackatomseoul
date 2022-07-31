@@ -529,20 +529,13 @@ func (h GovHooks) AfterProposalVotingPeriodEnded(ctx sdk.Context, proposalID uin
 }
 
 func (h GovHooks) AfterProposalSubmission(ctx sdk.Context, proposalID uint64) {
-	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Submitted proposal: ", proposalID)
-	fmt.Println("2$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Submitted proposal: ", proposalID)
-
-	add, err := sdk.AccAddressFromHex("11")
+	add, err := sdk.AccAddressFromHex("00")
 
 	if err != nil {
 		fmt.Println("X", err)
 	}
 
-	fmt.Println("X2", add)
 	h.k.SendPCVote(ctx, proposalID, add)
-	fmt.Println("X3", add)
-
-	// panic("BAD")
 }
 
 func (h GovHooks) AfterProposalVote(ctx sdk.Context, proposalID uint64, voterAddr sdk.AccAddress) {
